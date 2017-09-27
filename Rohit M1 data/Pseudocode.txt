@@ -1,0 +1,126 @@
+/*********************************************************************
+ * File                 : SummerCourse.txt
+ * Author Name          : Rohit Khandagale
+ * Description          : Program to calculate fee of HSC passed student 
+						  after discount for summer course based on their percentage.
+ * Version              : 1.0
+ * Last Modified Date   : 28-SEPT-2017
+ * Change Description   : Description about the changes implemented
+ *********************************************************************
+/******* Creating Customer record with name,percentage***********/
+
+RECORD Student
+	DECLARE name AS STRING
+	DECLARE percentage AS DECIMAL
+END RECORD
+
+
+BEGIN
+	DECLARE stud AS STUDENT          //Creating Student record variable 
+	DECLARE fees AS DECIMAL
+	DECLARE discount AS DECIMAL	
+
+    PROMPT "Enter Student Name : " AND STORE IN stud.name
+		isValidAlpha(std.name))
+			EXCEPTION 
+				WHEN InvalidNameException THEN
+					PRINT errorMessage
+						LOG errormessage in LOG File
+	
+	PROMPT "Enter Percentage : " AND STORE IN stud.percentage
+		isValidInput(std.percentage))
+			EXCEPTION 
+				WHEN InvalidInputException THEN
+					PRINT errorMessage
+						LOG errormessage in LOG File
+				
+				discount=getDiscount(percentage)
+				fees=calculateFee(discount)
+
+				DISPLAY "The Course fee is",+fees
+	
+END
+
+/***************************************************************************************
+* Module Name         : getDiscount(INTEGER)
+* Input Parameters    : INTEGER
+* Return Type         : DECIMAL
+* Author              : Rohit Khandagale
+* Creation Date       : 28-SEPT-2017
+* Description         : Subroutine to get discount on the course fee based on percentage
+ ****************************************************************************************/
+
+DECIMAL SUB getDiscount(INTEGER percentage)
+
+	IF(std.percentage >90) THEN
+		RETURN 0.50
+	ELSE IF(std.percentage >80) THEN
+		RETURN 0.40
+	ELSE IF(std.percentage >70) THEN
+		RETURN 0.30
+	ELSE
+		RETURN 0
+	
+
+
+
+/*********************************************************************
+* Module Name         : calculateFee(INTEGER)
+* Input Parameters    : INTEGER
+* Return Type         : DECIMAL
+* Author              : Rohit Khandagale
+* Creation Date       : 28-SEPT-2017
+* Description         : 
+ *********************************************************************/
+
+
+DECIMAL SUB calculateFee(INTEGER discount) THEN
+
+	DECLARE basic AS INTEGER
+	INITIALISE basic TO 6000
+		CALCULATE fees= (basic - discount) * basic
+    RETURN fees
+
+END SUB
+
+
+/*********************************************************************
+* Module Name         : isValidAlpha(String)
+* Input Parameters    : STRING
+* Return Type         : BOOLEAN
+* Author              : Rohit Khandagale
+* Creation Date       : 28-SEPT-2017
+* Description         : 
+ *********************************************************************/
+
+
+BOOLEAN SUB isValidAlpha(String name)
+
+	IF(isAlpha(name) THEN
+		RETURN true
+	ELSE
+	
+		RAISE InvalidNameException("Student Name must contain alphabets only")
+		RETURN false
+
+	END IF
+END SUB
+
+
+/*********************************************************************
+* Module Name         : isDecimal(INTEGER)
+* Input Parameters    : INTEGER
+* Return Type         : BOOLEAN
+* Author              : Rohit Khandagale
+* Creation Date       : 28-SEPT-2017
+* Description         : 
+ *********************************************************************/
+
+BOOLEAN SUB isValidInput(INTEGER percentage)
+	IF(isDigit(percentage)
+		RETURN true
+	ELSE
+		RAISE InvalidInputException("Percentage must contain digits only.)
+		RETURN false
+	END IF
+END SUB

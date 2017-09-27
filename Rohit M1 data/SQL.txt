@@ -1,0 +1,81 @@
+CREATE OR REPLACE PROCEDURE getCustomerDetails(p_id customers.progid%TYPE) IS
+
+	CURSOR cust_cur(p_id customers.progid%TYPE) IS 
+		SELECT c.name cname,c.mobile_no cmob,p.name pname,p.duration_months pdm from customers c,loanprograms p where p.progid = p_id AND c.progid = p.progid;	
+cust customers%ROWTYPE;
+
+Laon_data Loanprograms.progid%TYPE;
+BEGIN
+
+	SELECT progid INTO Loan_data from Loanprograms WHERE progid = p_id;
+	DBMS_OUTPUT.PUT_LINE('Customer Name    MobileNumber   Program Name   Duration in Months');
+	DBMS_OUTPUT.PUT_LINE('__________________________________________________________________');
+	
+	FOR cust in cust_cur(p_id)
+		LOOP
+			DBMS_OUTPUT.PUT_LINE('      '||cust.cname || '            ' || cust.cmob || '       ' ||cust.pname || '              ' || cust.pdm);
+		END LOOP;
+	DBMS_OUTPUT.PUT_LINE('________________________________________________________________________________________');
+
+	EXCEPTION
+		WHEN NO_DATA_FOUND THEN
+		DBMS_OUTPUT.PUT_LINE('Program with an id ' || p_id || ' doesnt exists');
+
+END getCustomerDetails;
+ /
+
+========================================================================================================================================================================
+
+
+
+
+
+SQL> select * from customers where progid = (select progid from loanprograms where name = 'HomeLoan');
+
+APPLICATIONID NAME                            MOBILE_NO
+------------- ------------------------------ ----------
+EMIALID                                      PROGID
+---------------------------------------- ----------
+         1001 Priya                          9982212345
+priya@capgemini.com                               1
+
+         1002 Anu                            9982457812
+anu@capgemini.com                                 1
+
+         1003 Arun                           9982457889
+arun@capgemini.com                                1
+
+
+=====================================================================================================================================
+
+SQL> select * from customers where progid = (select progid from customers where
+applicationid = 1001) and applicationId not in (1001);
+
+APPLICATIONID NAME                            MOBILE_NO
+------------- ------------------------------ ----------
+EMIALID                                      PROGID
+---------------------------------------- ----------
+         1002 Anu                            9982457812
+anu@capgemini.com                                 1
+
+         1003 Arun                           9982457889
+arun@capgemini.com                                1
+
+
+=====================================================================================================================================
+
+
+ALTER TABLE loanprograms
+ADD CONSTRAINT checkMinAndMax CHECK (min_amt > 0 AND max_amt > 0);
+
+
+
+
+=====================================================================================================================================
+
+
+SQL> create sequence application_id_seq start with 1010;
+
+Sequence created.
+
+SQL> insert into customers values(application_id_seq,)
